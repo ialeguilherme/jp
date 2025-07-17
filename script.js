@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Substitua com suas próprias credenciais do Supabase
 
 
-import { createClient } from '@supabase/supabase-js'// Create a single supabase client for interacting with your databaseconst 
-const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NTA4NjUsImV4cCI6MjA2ODAyNjg2NX0._UKv8z0MIC96q4oMFU6vZkMCUUjolxf86LizMCaDtxo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjQ1MDg2NSwiZXhwIjoyMDY4MDI2ODY1fQ.ABIfz3Gf29cUP_6Mq4_1VE5zndw5lYwXL6Eial-Q19E')
+import { createClient } from '@supabase/supabase-js';// Create a single supabase client for interacting with your databaseconst 
+const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NTA4NjUsImV4cCI6MjA2ODAyNjg2NX0._UKv8z0MIC96q4oMFU6vZkMCUUjolxf86LizMCaDtxo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjQ1MDg2NSwiZXhwIjoyMDY4MDI2ODY1fQ.ABIfz3Gf29cUP_6Mq4_1VE5zndw5lYwXL6Eial-Q19E');
 
     // ---------------------------------
 
