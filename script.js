@@ -10,16 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('reset-button');
 
     // --- Configuração do Supabase ---
-    // Substitua com suas próprias credenciais do Supabase
+    // Substitua 'SEU_URL_DO_PROJETO_SUPABASE' e 'SUA_CHAVE_ANON_PUBLIC_SUPABASE'
+    // pelos valores reais do seu painel Supabase (Project Settings -> API).
+    // Use a 'Project URL' e a chave 'anon (public)'. NUNCA use a 'service_role' key no frontend!
+    const SUPABASE_URL = 'https://rfhnghyqmdyiyicfqdti.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NTA4NjUsImV4cCI6MjA2ODAyNjg2NX0._UKv8z0MIC96q4oMFU6vZkMCUUjolxf86LizMCaDtxo';
 
-
-import { createClient } from '@supabase/supabase-js';// Create a single supabase client for interacting with your databaseconst 
-const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NTA4NjUsImV4cCI6MjA2ODAyNjg2NX0._UKv8z0MIC96q4oMFU6vZkMCUUjolxf86LizMCaDtxo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjQ1MDg2NSwiZXhwIjoyMDY4MDI2ODY1fQ.ABIfz3Gf29cUP_6Mq4_1VE5zndw5lYwXL6Eial-Q19E');
-
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     // ---------------------------------
-
-    // A fila agora será gerenciada diretamente pelo Supabase e renderizada
-    // let queue = []; // Não usaremos mais uma array local para a fila principal
 
     // Função para atualizar data, hora e temperatura (simulada)
     function updateDateTimeAndTemperature() {
@@ -35,9 +33,10 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
     function addPersonToDOM(person) {
         const listItem = document.createElement('li');
         listItem.classList.add('queue-item', person.type);
-        listItem.dataset.id = person.id;
+        listItem.dataset.id = person.id; // Assume que o ID é gerado pelo Supabase
 
-        const timeAdded = new Date(person.time_added).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        // Supabase geralmente usa 'created_at' ou 'time_added' se você definiu
+        const timeAdded = new Date(person.time_added || person.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
         const observationHtml = person.observation ? `<p class="queue-item-observation">${person.observation}</p>` : '';
 
@@ -65,7 +64,7 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
         queueList.innerHTML = ''; // Limpa a lista antes de renderizar
         // Busca os dados ordenados pela posição
         const { data, error } = await supabase
-            .from('queue_items')
+            .from('queue_items') // Nome da sua tabela no Supabase
             .select('*')
             .order('position', { ascending: true }); // Ordena pela nova coluna 'position'
 
@@ -98,16 +97,18 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
                 return;
             }
 
-            const nextPosition = maxPositionData.length > 0 ? maxPositionData[0].position + 1 : 0;
+            // A posição é o valor máximo existente + 1, ou 0 se a tabela estiver vazia
+            const nextPosition = maxPositionData.length > 0 && maxPositionData[0].position !== null ? maxPositionData[0].position + 1 : 0;
 
             const { data, error } = await supabase
-                .from('queue_items')
+                .from('queue_items') // Nome da sua tabela no Supabase
                 .insert([
                     {
                         name: name,
                         type: type,
                         observation: observation,
-                        position: nextPosition // Adiciona a posição
+                        position: nextPosition,
+                        time_added: new Date().toISOString() // Adiciona o timestamp
                     }
                 ])
                 .select(); // Retorna o item inserido para adicionar ao DOM
@@ -116,7 +117,7 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
                 console.error('Erro ao adicionar pessoa ao Supabase:', error);
                 alert('Erro ao adicionar pessoa à fila. Verifique o console para mais detalhes.');
             } else {
-                addPersonToDOM(data[0]); // data[0] contém o item inserido com o ID gerado
+                addPersonToDOM(data[0]); // data[0] contém o item inserido com o ID gerado pelo Supabase
                 personNameInput.value = '';
                 priorityTypeSelect.value = 'normal';
                 observationInput.value = '';
@@ -130,7 +131,7 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
     async function removePerson(id) {
         if (confirm('Tem certeza que deseja remover esta pessoa da fila?')) {
             const { error } = await supabase
-                .from('queue_items')
+                .from('queue_items') // Nome da sua tabela
                 .delete()
                 .eq('id', id); // 'eq' significa 'equal to' (igual a)
 
@@ -148,7 +149,7 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
     resetButton.addEventListener('click', async () => {
         if (confirm('Tem certeza que deseja zerar a fila? Esta ação não pode ser desfeita.')) {
             const { error } = await supabase
-                .from('queue_items')
+                .from('queue_items') // Nome da sua tabela
                 .delete()
                 .neq('id', 'null'); // Deleta todos os itens onde o ID não é nulo (ou seja, todos)
 
@@ -176,7 +177,7 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
         // Usamos Promise.all para esperar que todas as atualizações sejam concluídas
         const updates = updatedQueueOrder.map(item =>
             supabase
-                .from('queue_items')
+                .from('queue_items') // Nome da sua tabela
                 .update({ position: item.position })
                 .eq('id', item.id)
         );
@@ -194,7 +195,6 @@ const supabase = createClient('https://yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc
             // Não precisamos chamar renderQueue aqui, pois o Dragula já moveu os elementos
         }
     });
-
 
     // Inicializa a exibição
     updateDateTimeAndTemperature();
