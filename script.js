@@ -1,4 +1,5 @@
 // script.js
+import { createClient } from '@supabase/supabase-js';
 document.addEventListener('DOMContentLoaded', () => {
     const dateTimeSpan = document.getElementById('date-time');
     const temperatureSpan = document.getElementById('temperature');
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Substitua 'SEU_URL_DO_PROJETO_SUPABASE' e 'SUA_CHAVE_ANON_PUBLIC_SUPABASE'
     // pelos valores reais do seu painel Supabase (Project Settings -> API).
     // Use a 'Project URL' e a chave 'anon (public)'. NUNCA use a 'service_role' key no frontend!
-import { createClient } from '@supabase/supabase-js'
+
 const SUPABASE_URL = 'https://rfhnghyqmdyiyicfqdti.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaG5naHlxbWR1aXlpY2ZxZHRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NTA4NjUsImV4cCI6MjA2ODAyNjg2NX0._UKv8z0MIC96q4oMFU6vZkMCUUjolxf86LizMCaDtxo';
 const supabaseKey = process.env.SUPABASE_ANON_KEY)
