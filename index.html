@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Fila de Atendimento</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Organizador de Fila de Atendimento</h1>
+            <div class="info-bar">
+                <span id="date-time"></span>
+                <span id="temperature"></span>
+            </div>
+        </header>
+
+        <main>
+            <section class="add-person">
+                <h2>Adicionar Pessoa à Fila</h2>
+                <div class="input-group">
+                    <input type="text" id="person-name" placeholder="Nome da Pessoa" aria-label="Nome da Pessoa">
+                    <select id="priority-type" aria-label="Tipo de Atendimento">
+                        <option value="normal">Normal</option>
+                        <option value="preferencial">Preferencial</option>
+                        <option value="urgencia">Urgência</option>
+                        <option value="encaixe">Encaixe</option>
+                    </select>
+                    <textarea id="observation" placeholder="Observações (opcional)" rows="3"></textarea>
+                    <button id="add-button">Adicionar</button>
+                </div>
+            </section>
+
+            <section class="queue-list">
+                <h2>Fila de Atendimento</h2>
+                <div class="color-legend">
+                    <span class="legend-item"><span class="color-box green"></span>Normal</span>
+                    <span class="legend-item"><span class="color-box yellow"></span>Preferencial</span>
+                    <span class="legend-item"><span class="color-box red"></span>Urgência</span>
+                    <span class="legend-item"><span class="color-box blue"></span>Encaixe</span>
+                </div>
+                <ul id="queue">
+                    </ul>
+            </section>
+
+            <button id="reset-button" class="reset-button">Zerar Fila</button>
+        </main>
+    </div>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
